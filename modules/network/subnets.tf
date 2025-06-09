@@ -4,7 +4,14 @@ resource "aws_subnet" "public" {
   cidr_block              = var.public_subnet_cidrs[count.index]
   availability_zone       = var.azs[count.index]
   map_public_ip_on_launch = true
-  tags                    = merge(var.tags, { Name = "${var.name}-public-${var.azs[count.index]}","kubernetes.io/role/elb" = 1 })
+
+  tags = merge(
+    var.tags,
+    {
+      Name                     = "${var.name}-public-${var.azs[count.index]}"
+      "kubernetes.io/role/elb" = "1"
+    }
+  )
 }
 
 resource "aws_subnet" "private_app" {
@@ -12,7 +19,16 @@ resource "aws_subnet" "private_app" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = var.private_app_subnet_cidrs[count.index]
   availability_zone = var.azs[count.index]
-  tags              = merge(var.tags, { Name = "${var.name}-private-app-${var.azs[count.index]}" , "karpenter.sh/discovery" = "${var.name}" ,"kubernetes.io/role/internal-elb" = 1 , Type = "apps"})
+
+  tags = merge(
+    var.tags,
+    {
+      Name                             = "${var.name}-private-app-${var.azs[count.index]}"
+      "karpenter.sh/discovery"        = var.name
+      "kubernetes.io/role/internal-elb" = "1"
+      Type                             = "apps"
+    }
+  )
 }
 
 resource "aws_subnet" "private_infra" {
@@ -20,7 +36,16 @@ resource "aws_subnet" "private_infra" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = var.private_infra_subnet_cidrs[count.index]
   availability_zone = var.azs[count.index]
-  tags              = merge(var.tags, { Name = "${var.name}-private-app-${var.azs[count.index]}" , "karpenter.sh/discovery" = "${var.name}","kubernetes.io/role/internal-elb" = 1, Type = "infra" })
+
+  tags = merge(
+    var.tags,
+    {
+      Name                             = "${var.name}-private-infra-${var.azs[count.index]}"
+      "karpenter.sh/discovery"        = var.name
+      "kubernetes.io/role/internal-elb" = "1"
+      Type                             = "infra"
+    }
+  )
 }
 
 resource "aws_subnet" "private_rds" {
@@ -28,7 +53,16 @@ resource "aws_subnet" "private_rds" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = var.private_rds_subnet_cidrs[count.index]
   availability_zone = var.azs[count.index]
-  tags              = merge(var.tags, { Name = "${var.name}-private-app-${var.azs[count.index]}" , "karpenter.sh/discovery" = "${var.name}","kubernetes.io/role/internal-elb" = 1, Type = "rds" })
+
+  tags = merge(
+    var.tags,
+    {
+      Name                             = "${var.name}-private-rds-${var.azs[count.index]}"
+      "karpenter.sh/discovery"        = var.name
+      "kubernetes.io/role/internal-elb" = "1"
+      Type                             = "rds"
+    }
+  )
 }
 
 resource "aws_subnet" "private_redis" {
@@ -36,7 +70,16 @@ resource "aws_subnet" "private_redis" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = var.private_redis_subnet_cidrs[count.index]
   availability_zone = var.azs[count.index]
-  tags              = merge(var.tags, { Name = "${var.name}-private-app-${var.azs[count.index]}" , "karpenter.sh/discovery" = "${var.name}" ,"kubernetes.io/role/internal-elb" = 1, Type = "redis"})
+
+  tags = merge(
+    var.tags,
+    {
+      Name                             = "${var.name}-private-redis-${var.azs[count.index]}"
+      "karpenter.sh/discovery"        = var.name
+      "kubernetes.io/role/internal-elb" = "1"
+      Type                             = "redis"
+    }
+  )
 }
 
 resource "aws_subnet" "private_mongodb" {
@@ -44,5 +87,14 @@ resource "aws_subnet" "private_mongodb" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = var.private_mongodb_subnet_cidrs[count.index]
   availability_zone = var.azs[count.index]
-  tags              = merge(var.tags, { Name = "${var.name}-private-app-${var.azs[count.index]}" , "karpenter.sh/discovery" = "${var.name}" ,"kubernetes.io/role/internal-elb" = 1, Type = "mongodb" })
+
+  tags = merge(
+    var.tags,
+    {
+      Name                             = "${var.name}-private-mongodb-${var.azs[count.index]}"
+      "karpenter.sh/discovery"        = var.name
+      "kubernetes.io/role/internal-elb" = "1"
+      Type                             = "mongodb"
+    }
+  )
 }
